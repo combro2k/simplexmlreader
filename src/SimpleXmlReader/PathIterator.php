@@ -20,8 +20,10 @@ class PathIterator implements Iterator
     protected $rewindCount;
     protected $isValid;
     protected $returnType;
+    protected $matchCount;
+    protected $returnException;
 
-    public function __construct(ExceptionThrowingXMLReader $reader, $path, $returnType)
+    public function __construct(ExceptionThrowingXMLReader $reader, $path, $returnType, $returnException)
     {
         $this->reader = $reader;
         $this->searchPath = $path;
@@ -31,6 +33,7 @@ class PathIterator implements Iterator
         $this->rewindCount = 0;
         $this->isValid = false;
         $this->returnType = $returnType;
+        $this->returnException = $returnException;
     }
 
     public function current()
@@ -49,7 +52,15 @@ class PathIterator implements Iterator
 
         if ($this->isValid) {
             $this->matchCount += 1;
-            $this->currentDomExpansion = $this->getXMLObject();
+            if ($this->returnException) {
+                try {
+                    $this->currentDomExpansion = $this->getXMLObject();
+                } catch (XmlException $e) {
+                    $this->currentDomExpansion = $e;
+                }
+            } else {
+                $this->currentDomExpansion = $this->getXMLObject();
+            }
         }
     }
 

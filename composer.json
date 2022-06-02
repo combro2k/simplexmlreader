@@ -1,6 +1,6 @@
 
 {
-	"name": "suramon/simple-xml-reader",
+	"name": "combro2k/simple-xml-reader",
 	"description": "The power of SimpleXmlElement, combined with the resource-friendliness of XmlReader",
 	"type": "library",
 	"homepage": "https://github.com/SuRaMoN/SimpleXmlReader",

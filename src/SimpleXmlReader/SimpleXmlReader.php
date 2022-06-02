@@ -44,8 +44,8 @@ class SimpleXmlReader
         return $simpleXmlReader;
     }
 
-    public function path($path, $returnType = self::RETURN_SIMPLE_XML)
+    public function path($path, $returnType = self::RETURN_SIMPLE_XML, $returnException = 0)
     {
-        return new PathIterator($this->xmlReader, $path, $returnType);
+        return new PathIterator($this->xmlReader, $path, $returnType, $returnException);
     }
 }

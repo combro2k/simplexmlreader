@@ -3,14 +3,14 @@ SimpleXmlReader
 
 Interface for the PHP XML Pull parser XMLReader that adds super-simplified xpath functionality. This is ideal for reading huge xml files without the memory costs of other xml libraries (eg SImpleXMLElement).
 
-[![Build Status](https://travis-ci.org/SuRaMoN/simplexmlreader.png?branch=master)](https://travis-ci.org/SuRaMoN/simplexmlreader)
-[![Build Status](https://scrutinizer-ci.com/g/SuRaMoN/simplexmlreader/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/SuRaMoN/simplexmlreader/)
+[![Build Status](https://travis-ci.org/combro2k/simplexmlreader.png?branch=master)](https://travis-ci.org/SuRaMoN/simplexmlreader)
+[![Build Status](https://scrutinizer-ci.com/g/combro2k/simplexmlreader/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/combro2k/simplexmlreader/)
 
 
 Example
 -------
 
-source code: https://github.com/SuRaMoN/simplexmlreader/blob/master/examples/simple-example.php
+source code: https://github.com/combro2k/simplexmlreader/blob/master/examples/simple-example.php
 
 ```php
 $xml = SimpleXmlReader::openFromString('
