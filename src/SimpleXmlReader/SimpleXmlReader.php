@@ -9,14 +9,14 @@ class SimpleXmlReader
     const RETURN_INNER_XML_STRING = 'RETURN_INNER_XML_STRING';
     const RETURN_OUTER_XML_STRING = 'RETURN_OUTER_XML_STRING';
 
-    protected $xmlReader;
+    protected ExceptionThrowingXMLReader $xmlReader;
 
     protected function __construct()
     {
         $this->xmlReader = new ExceptionThrowingXMLReader();
     }
 
-    public static function autoOpenXML($path, $encoding = 'UTF-8', $options = 0)
+    public static function autoOpenXML($path, $encoding = 'UTF-8', $options = 0): SimpleXmlReader
     {
         if (strtolower(substr($path, -3)) == '.gz') {
             return self::openGzippedXML($path, $encoding, $options);
@@ -25,26 +25,32 @@ class SimpleXmlReader
         }
     }
 
-    public static function openXML($path, $encoding = 'UTF-8', $options = 0)
+    /**
+     * @throws XmlException
+     */
+    public static function openXML($path, $encoding = 'UTF-8', $options = 0): SimpleXmlReader
     {
         $simpleXmlReader = new self();
         $simpleXmlReader->xmlReader->open($path, $encoding, $options);
         return $simpleXmlReader;
     }
 
-    public static function openGzippedXML($path, $encoding = 'UTF-8', $options = 0)
+    /**
+     * @throws XmlException
+     */
+    public static function openGzippedXML($path, $encoding = 'UTF-8', $options = 0): SimpleXmlReader
     {
         return self::openXML("compress.zlib://$path", $encoding, $options);
     }
 
-    public static function openFromString($source, $encoding = 'UTF-8', $options = 0)
+    public static function openFromString($source, $encoding = 'UTF-8', $options = 0): SimpleXmlReader
     {
         $simpleXmlReader = new self();
         $simpleXmlReader->xmlReader->XML($source, $encoding, $options);
         return $simpleXmlReader;
     }
 
-    public function path($path, $returnType = self::RETURN_SIMPLE_XML)
+    public function path($path, $returnType = self::RETURN_SIMPLE_XML): PathIterator
     {
         return new PathIterator($this->xmlReader, $path, $returnType);
     }

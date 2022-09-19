@@ -2,6 +2,9 @@
 
 namespace SimpleXmlReader;
 
+use DOMNode;
+use Exception;
+use SimpleXMLElement;
 use XMLReader;
 use Iterator;
 use DOMDocument;
@@ -12,14 +15,16 @@ class PathIterator implements Iterator
     const DESCENDANTS_COULD_MATCH = 'DESCENDANTS_COULD_MATCH';
     const DESCENDANTS_CANT_MATCH = 'DESCENDANTS_CANT_MATCH';
 
-    protected $reader;
+    protected ExceptionThrowingXMLReader $reader;
     protected $searchPath;
-    protected $searchCrumbs;
-    protected $crumbs;
-    protected $currentDomExpansion;
-    protected $rewindCount;
-    protected $isValid;
-    protected $returnType;
+    protected array $searchCrumbs;
+    protected array $crumbs;
+    protected mixed $currentDomExpansion;
+    protected int $rewindCount;
+    protected bool $isValid;
+    protected mixed $returnType;
+
+    private int $matchCount;
 
     public function __construct(ExceptionThrowingXMLReader $reader, $path, $returnType)
     {
@@ -33,17 +38,17 @@ class PathIterator implements Iterator
         $this->returnType = $returnType;
     }
 
-    public function current()
+    public function current(): mixed
     {
         return $this->currentDomExpansion;
     }
 
-    public function key()
+    public function key(): mixed
     {
         return $this->matchCount;
     }
 
-    public function next()
+    public function next(): void
     {
         $this->isValid = $this->tryGotoNextIterationElement();
 
@@ -53,7 +58,10 @@ class PathIterator implements Iterator
         }
     }
 
-    public function rewind()
+    /**
+     * @throws XmlException
+     */
+    public function rewind(): void
     {
         $this->rewindCount += 1;
         if ($this->rewindCount > 1) {
@@ -62,12 +70,16 @@ class PathIterator implements Iterator
         $this->next();
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return $this->isValid;
     }
 
-    protected function getXMLObject()
+    /**
+     * @throws XMlException
+     * @throws Exception
+     */
+    protected function getXMLObject(): string|bool|null|SimpleXMLElement|DOMNode
     {
         switch ($this->returnType) {
             case SimpleXMLReader::RETURN_DOM:
@@ -92,7 +104,7 @@ class PathIterator implements Iterator
         }
     }
 
-    protected function pathIsMatching()
+    protected function pathIsMatching(): string
     {
         if (count($this->crumbs) > count($this->searchCrumbs)) {
             return self::DESCENDANTS_CANT_MATCH;
@@ -110,7 +122,7 @@ class PathIterator implements Iterator
         return self::DESCENDANTS_COULD_MATCH;
     }
 
-    public function tryGotoNextIterationElement()
+    public function tryGotoNextIterationElement(): bool
     {
         $r = $this->reader;
 
