@@ -29,7 +29,7 @@ class ExceptionThrowingXMLReader extends XMLReader
     /**
      * @throws XmlException
      */
-    public function expand($baseNode = null): DOMNode|bool
+    public function expand($baseNode = null): DOMNode|false
     {
         if (null === $baseNode) {
             return static::ensureSuccess(@parent::expand(), 'expend');
